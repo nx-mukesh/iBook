@@ -1,6 +1,7 @@
 import { Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography } from '@material-ui/core';
 import { FavoriteBorderOutlined, FavoriteOutlined } from '@material-ui/icons';
 import {useState} from 'react';
+import baseHelper from '@/helper/baseHelper';
 
 export default function ProductDetails({ product }) {
   const [isFavorite, setIsFavorite] = useState(false);
@@ -45,7 +46,7 @@ export default function ProductDetails({ product }) {
           <Button variant="contained" color="primary" size="large">
             Buy Now
           </Button>
-          <Button variant="contained" color="secondary" size="large" style={{ marginLeft: '16px' }}>
+          <Button onClick={() => baseHelper.addToCart(product.name)} variant="contained" color="secondary" size="large" style={{ marginLeft: '16px' }}>
             Add to Cart
           </Button>
         </CardActions>

@@ -135,13 +135,11 @@ const Product = () => {
     {
       image: 'https://i.pinimg.com/736x/01/61/28/016128391cd5de7d8b886cb3a8322df3.jpg',
       caption: 'Image 4',
-    },
+    }
   ];
   
   return (
-    //   // console.log('LOG ~ file: index.js:26 ~ returnproductData.map ~ item:', item);
     <Box>
-      {/* <Navbar /> */}
       <div className='productPage' style={{ marginTop: '10px' }}>
         <MyCarousel carousel={images}/>
         <ProductFrame product={productData} />

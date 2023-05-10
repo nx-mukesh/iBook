@@ -1,8 +1,25 @@
-import Navbar from './navbar';
-import ProductFrame from './productFrame';
-import MyCarousel from './carousel';
 import AboutUs from './aboutUs';
+import CheckoutPage from './checkout';
+import CreateReview from './createReview';
+import InCart from './cart';
+import MyCarousel from './carousel';
+import Navbar from './navbar';
+import PlaceOrderButton from './placeOrder';
 import ProductDetails from './productDetails';
-import ProductReview from './review';
+import ProductFrame from './productFrame';
+import Review from './review';
+import Footer from './footer';
 
-export { AboutUs, Navbar,ProductFrame, MyCarousel, ProductDetails, ProductReview};
+export {
+  AboutUs,
+  CheckoutPage,
+  CreateReview,
+  Footer,
+  InCart,
+  MyCarousel,
+  Navbar,
+  PlaceOrderButton,
+  ProductDetails,
+  ProductFrame,
+  Review,
+};

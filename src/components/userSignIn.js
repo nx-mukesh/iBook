@@ -1,3 +1,5 @@
+import {useState} from 'react';
+import {CircularProgress} from '@material-ui/core';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
@@ -11,15 +13,30 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 export default function UserSignIn() {
-  // console.log("props==> 14", props);
+  const [formValue, setFormValue] = useState({email:'', password:''});
+  const [loading, setLoading] = useState(false);
   const  theme = createTheme();
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    setLoading(true)
+    setTimeout(async()=>{
+      try {
+        const response = await axios.post('/api/register', formValue);
+        console.log(response.data);
+        setLoading(false)
+        console.log("userData", formValue)
+      } catch (err) {
+        setLoading(false)
+        console.log(err);
+      }
+    },300)
+    
+  };
+  
+  const handleChange = (e) => {
+    setFormValue({ ...formValue, [e.target.name]: e.target.value });
   };
 
   return (
@@ -48,25 +65,26 @@ export default function UserSignIn() {
               fullWidth
               id='email'
               label='Email Address'
-              name='email'
-              autoComplete='email'
               autoFocus
+              name='email'
+              onChange={handleChange}
             />
             <TextField
               margin='normal'
               required
+              autoFocus
               fullWidth
               name='password'
               label='Password'
               type='password'
               id='password'
-              autoComplete='current-password'
+              onChange={handleChange}
             />
             <FormControlLabel control={<Checkbox value='remember' color='primary' />} label='Remember me' />
-            <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>
-              Sign In
+            <Button type='submit' fullWidth variant='contained' style={{ marginTop:30, padding:10, borderRadius:5}}>
+              {loading ? <CircularProgress size={24} /> : 'Sign In'}
             </Button>
-            <Grid container>
+            <Grid container mt={2}>
               <Grid item xs>
                 <Link href='#' variant='body2'>
                   Forgot password?

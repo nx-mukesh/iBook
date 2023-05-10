@@ -1,23 +1,22 @@
 import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
+import { CircularProgress } from '@material-ui/core';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+    <Typography variant='body2' color='text.secondary' align='center' {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color='inherit' href='https://mui.com/'>
         Your Website
       </Link>{' '}
       {new Date().getFullYear()}
@@ -29,18 +28,32 @@ function Copyright(props) {
 const theme = createTheme();
 
 export default function UserSignUp() {
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  const [formData, setFormData] = useState({ firstName: '', lastName: '', email: '', password: '' });
+  const [loading, setLoading] = useState(false);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    setTimeout(async () => {
+      console.log('userData', formData);
+      try {
+        const response = await axios.post('/api/register', formData);
+        console.log(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    }, 3000);
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+      <Container component='main' maxWidth='xs'>
         <CssBaseline />
         <Box
           sx={{
@@ -54,83 +67,67 @@ export default function UserSignUp() {
             alignItems: 'center',
           }}
         >
-        {/* <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        > */}
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-            {/* <LockOutlinedIcon /> */}
-          </Avatar>
-          <Typography component="h1" variant="h5">
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>{/* <LockOutlinedIcon /> */}</Avatar>
+          <Typography component='h1' variant='h5'>
             Sign up
           </Typography>
           <Box component='form' onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          {/* <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}> */}
+            {/* <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}> */}
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
-                  autoComplete="given-name"
-                  name="firstName"
+                  name='firstName'
                   required
                   fullWidth
-                  id="firstName"
-                  label="First Name"
+                  id='firstName'
+                  label='First Name'
                   autoFocus
+                  onChange={handleChange}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
+                <TextField required fullWidth id='lastName' label='Last Name' name='lastName' onChange={handleChange} />
+              </Grid>
+              <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
+                  id='email'
+                  onChange={handleChange}
+                  label='Email Address'
+                  name='email'
+                  autoFocus
+                  autoComplete='email'
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={<Checkbox value="allowExtraEmails" color="primary" />}
-                  label="I want to receive inspiration, marketing promotions and updates via email."
+                  name='password'
+                  label='Password'
+                  type='password'
+                  id='password'
+                  autoComplete='new-password'
+                  onChange={handleChange}
                 />
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
-            <Grid container justifyContent="flex-end">
+            <Grid spacing={5}>
+              <Grid item sx={12} spacing={5}>
+                <Button
+                  type='submit'
+                  fullWidth
+                  variant='contained'
+                  style={{ marginTop: 30, padding: 10, borderRadius: 5 }}
+                >
+                  {loading ? <CircularProgress size={24} /> : 'Sign Up'}
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid container justifyContent='flex-end'>
               <Grid item>
-                <Link href="/auth/signin" variant="body2">
+                <Link href='/auth/signin' variant='body2'>
                   Already have an account? Sign in
                 </Link>
               </Grid>
